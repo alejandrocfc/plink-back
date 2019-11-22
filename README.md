@@ -11,7 +11,7 @@
 - Clonar repo https://github.com/alejandrocfc/plink-back.git
 - Dentro de la carpeta ejecutar 
     - ``npm install``
-    - ``sequelize db:migrate``
+    - ``sequelize db:migrate`` Se debe tener creada la tabla ``plink`` en MySQL
 
 ### Scripts
 ``npm run start → Despliega la aplicación en el puerto 3000`` 
@@ -26,8 +26,8 @@
 ``GET /criptos/top → Las tres criptomonedas con mejor valor``
 
 ### Comentarios
-La ruta ``/users/login`` retorna un ``TOKEN`` que se utiliza para autenticación en las rutas de ``/criptos``. El ``TOKEN`` se debe agregar a la cabecera de la petición:
-``Authorization:TOKEN`` 
+La ruta ``/users/login`` retorna un ``TOKEN`` que se utiliza para autenticación en las rutas de ``/criptos``.  
+El ``TOKEN`` se debe agregar a la cabecera de la petición: ``Authorization:TOKEN``  
 En el archivo ``config/config.json`` cambiar las variables para acceso a la DB de acuerdo a la configuración local 
 
 ### Supuestos
