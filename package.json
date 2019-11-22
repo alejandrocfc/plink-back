@@ -1,0 +1,35 @@
+{
+  "name": "plink-back",
+  "version": "1.0.0",
+  "description": "Prueba backend PLINK",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alejandrocfc/plink-back.git"
+  },
+  "keywords": [
+    "Plink",
+    "NodeJS"
+  ],
+  "author": "Alejandro Mora",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alejandrocfc/plink-back/issues"
+  },
+  "homepage": "https://github.com/alejandrocfc/plink-back#readme",
+  "dependencies": {
+    "@hapi/joi": "^16.1.7",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "mysql2": "^2.0.1",
+    "sequelize": "^5.21.2"
+  }
+}
