@@ -26,6 +26,10 @@
 ``GET /criptos/top → Las tres criptomonedas con mejor valor``
 
 ### Comentarios
-La ruta ``/users/login`` retorna un ``TOKEN`` que se utiliza para autenticación en las rutas de ``/criptos``. El ``TOKEN`` se debe agregar a la cabecera de la petición: 
-``Authorization:TOKEN``
-    
+La ruta ``/users/login`` retorna un ``TOKEN`` que se utiliza para autenticación en las rutas de ``/criptos``. El ``TOKEN`` se debe agregar a la cabecera de la petición:
+``Authorization:TOKEN`` 
+En el archivo ``config/config.json`` cambiar las variables para acceso a la DB de acuerdo a la configuración local 
+
+### Supuestos
+- Los usuarios solo se pueden registrar e ingresar
+- Las criptomonedas son solo creables
