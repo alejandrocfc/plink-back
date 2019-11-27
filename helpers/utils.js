@@ -1,5 +1,16 @@
 const JWT = require('jsonwebtoken');
+const Axios = require('axios');
+const {ApiKey} = require("./constants");
 
+Axios.defaults.baseURL = 'https://bravenewcoin-v1.p.rapidapi.com/';
+Axios.defaults.headers.common['Authorization'] = ApiKey;
+
+/**
+ * Middleware: Verificar que el Token aún esté vivo
+ * @param req
+ * @param res
+ * @param next
+ */
 function checkJWT(req, res, next){
     const token = req.headers['authorization'];
     // verifies secret and checks expiration time
@@ -13,13 +24,70 @@ function checkJWT(req, res, next){
     });
 }
 
+/**.
+ * Crea Token con tiempo de vida: 2 minutos
+ * @param username → Nombre de usuario
+ * @param id → Identificador del usuario (PK)
+ * @returns JWT Firmado
+ */
 function signJWT(username, id){
-    //Create token expires in 2 min
     return JWT.sign({ username, id }, "plink", { expiresIn: "2m" });
 }
 
-function parseCoin(list) {
-    return list.map(({name,price,source})=>({name,price,source}))
+/**
+ * Con el list enviado, se mapea y se hace una petición para recoger el valor con respecto a la moneda del usuario
+ * @param list → Listado de criptomonedas del usuario
+ * @param currency → Moneda preferida del usuario
+ * @returns Listado de items de forma {name,price,source}
+ */
+function parseCoin(list,currency) {
+    return new Promise((resolve, reject) => {
+        const items = [];
+        Axios.all(list.map(({name}) => {
+            return Axios.get(`convert?qty=1&from=${name}&to=${currency}`, {headers: {'X-RapidAPI-Key': '78a4f7a824mshc139234a286ab1ep1bd37djsn0e0c176f8a7b'}})
+                .then(({data})=> {
+                    if(data.success){
+                        return items.push({name:data.from_name,source:data.source,price:data.to_quantity})
+                    }else{
+                        return reject({message:data.error})
+                    }
+                });
+        })).then(()=>{
+            resolve(items)
+        }).catch(e=>reject(handleReqError(e)));
+    })
 }
 
-module.exports = {checkJWT, signJWT, parseCoin};
+/**
+ * Parseo de error en petición de parseCoin
+ * @param error → Error de petición a BraveNew Coin
+ */
+function handleReqError(error){
+    const info = {};
+    if (error.response) {
+        info.status = error.response.status;
+        info.message = error.response.data.message ? error.response.data.message : JSON.stringify(error.response.data);
+    } else if (error.request) {
+        console.log(error.request);
+        info.status = 700;
+        info.message = 'Network Error';
+    } else {
+        info.status = 800;
+        info.message = error.message;
+    }
+    return info
+
+}
+
+/**
+ * Se revisa si la Criptomoneda existe
+ * @param name → Nombre de la criptomenda para guardar
+ * @returns Booleano si la criptomoneda existe
+ */
+function checkCripto(name){
+    return Axios.get(`ticker?coin=${name}`, {headers: {'X-RapidAPI-Key': '78a4f7a824mshc139234a286ab1ep1bd37djsn0e0c176f8a7b'}})
+        .then(({data})=> data.success);
+}
+
+
+module.exports = {checkJWT, signJWT, parseCoin, checkCripto};

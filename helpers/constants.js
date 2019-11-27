@@ -9,4 +9,5 @@ const userSchema = Joi.object().keys({
 const criptoSchema = Joi.object().keys({
     name: Joi.string().required()
 });
-module.exports = {userSchema, criptoSchema};
+const ApiKey = '78a4f7a824mshc139234a286ab1ep1bd37djsn0e0c176f8a7b';
+module.exports = {userSchema, criptoSchema, ApiKey};
