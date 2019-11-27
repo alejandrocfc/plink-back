@@ -89,5 +89,15 @@ function checkCripto(name){
         .then(({data})=> data.success);
 }
 
+/**
+ * Desde el listado, ordena de acuerdo al parametro por precio y saca los tres primeros
+ * @param list
+ * @param order : ASC o DESC
+ * @returns {Int16Array}
+ */
+function orderList(list, order){
+    const sort = list.sort((a, b) => order === 'ASC' ? a.price - b.price : b.price - a.price);
+    return sort.slice(0, 3);
+}
 
-module.exports = {checkJWT, signJWT, parseCoin, checkCripto};
+module.exports = {checkJWT, signJWT, parseCoin, checkCripto, orderList};
