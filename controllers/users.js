@@ -14,7 +14,7 @@ module.exports = {
                 currency: req.body.currency
             })
             .then(user => res.status(201).send("Created"))
-            .catch(error => res.status(400).send(error));
+            .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
     },
     login(req, res) {
         const {username,password} = req.body;
@@ -26,6 +26,6 @@ module.exports = {
                 const token = signJWT(user.username, user.id);
                 return res.status(200).send(token);
             })
-            .catch(err => (res.status(400).send(err)))
+            .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
     }
 };

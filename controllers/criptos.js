@@ -10,8 +10,8 @@ module.exports = {
             name: req.body.name,
             userId: req.userId
         })
-            .then(snap => res.status(201).send("Created"))
-            .catch(error => res.status(400).send(error));
+        .then(snap => res.status(201).send("Created"))
+        .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
     },
     mine(req, res) {
         let order = req.query.order;
@@ -22,7 +22,7 @@ module.exports = {
                 const list = parseCoin(snap);
                 return res.status(200).json(list);
             })
-            .catch(err => (res.status(400).send(err)))
+            .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
     },
     top(req, res) {
         return Criptos
@@ -31,6 +31,6 @@ module.exports = {
                 const list = parseCoin(snap);
                 return res.status(200).json(list);
             })
-            .catch(err => (res.status(400).send(err)))
+            .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
     }
 };
