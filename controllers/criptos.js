@@ -8,8 +8,6 @@ module.exports = {
         if(error) return res.status(400).send(error);
         return Criptos.create({
             name: req.body.name,
-            price: req.body.price,
-            source: req.body.source,
             userId: req.userId
         })
             .then(snap => res.status(201).send("Created"))

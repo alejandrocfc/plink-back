@@ -4,14 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type:DataTypes.TEXT,
       allowNull:false
-    },
-    price: {
-      type:DataTypes.INTEGER,
-      allowNull:false
-    },
-    source: {
-      type:DataTypes.STRING,
-      allowNull:false
     }
   }, {});
   Criptos.associate = function(models) {

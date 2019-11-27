@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "start:dev": "nodemon server.js",
+    "migrations": "sequelize db:migrations",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

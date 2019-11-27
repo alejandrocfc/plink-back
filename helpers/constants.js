@@ -7,8 +7,6 @@ const userSchema = Joi.object().keys({
     currency: Joi.string().valid('eur', 'usd', 'cop')
 });
 const criptoSchema = Joi.object().keys({
-    name: Joi.string().required(),
-    price: Joi.number().required(),
-    source: Joi.string().alphanum().required()
+    name: Joi.string().required()
 });
 module.exports = {userSchema, criptoSchema};
