@@ -1,0 +1,179 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Prueba Backend PLINK",
+    "version": "1.0.0",
+    "title": "PLINK Backend",
+    "contact": {
+      "email": "german.mora@sophossolutions.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "users",
+      "description": "API para registro y login de Usuarios"
+    },
+    {
+      "name": "criptos",
+      "description": "API para crear y listar criptomonedas de un usuario"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Registra un usuario al sistema",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "description": "Datos del usuario",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Nombre del usuario"
+                },
+                "lastname": {
+                  "type": "string",
+                  "description": "Apellido del usuario"
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Nombre de usuario"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "Contraseña mínimo 8 caracteres"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {"description": "Created"},
+          "400": {"description": "{success:false, message:Error}"}
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Ingreso de un usuario al sistema",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "credentials",
+            "description": "Username y password del usuario",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "description": "Nombre de usuario"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "Contraseña mínimo 8 caracteres"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {"description": "Token generated"},
+          "400": {"description": "{success:false, message:Error}"}
+        }
+      }
+    },
+    "/criptos": {
+      "post": {
+        "tags": ["criptos"],
+        "summary": "Crear nueva criptomoneda a un usuario",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Token JWT",
+            "in": "header"
+          },
+          {
+            "in": "body",
+            "name": "data",
+            "description": "Sigla de la criptomoneda",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Sigla de criptomoneda"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {"description": "Created"},
+          "400": {"description": "{success:false, message:Error}"}
+        }
+      }
+    },
+    "/criptos/mine": {
+      "get": {
+        "tags": ["criptos"],
+        "summary": "Listado de criptomonedas de un usuario",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Token JWT",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {"description": "Listado de Monedas → {name,price,source}"},
+          "400": {"description": "{success:false, message:Error}"}
+        }
+      }
+    },
+    "/criptos/top": {
+      "get": {
+        "tags": ["criptos"],
+        "summary": "Listado de las tres criptomonedas más valoradas",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Token JWT",
+            "in": "header"
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "description": "Order del listado, por defecto DESC",
+            "schema": {
+              "type": "string",
+              "description": "DESC || ASC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {"description": "Listado de Monedas → {name,price,source}"},
+          "400": {"description": "{success:false, message:Error}"}
+        }
+      }
+    }
+  }
+}

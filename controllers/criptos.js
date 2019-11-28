@@ -52,7 +52,7 @@ const mine = async (req, res) => {
 const top = async (req, res) => {
     try{
         let order = req.query.order;
-        if(!order || !order.match('^(ASC|DESC)$')) order = "ASC";
+        if(!order || !order.match('^(ASC|DESC)$')) order = "DESC";
         const user = await UsersCtrl.checkUser(req.userId);
         if(!user) return res.status(404).send("User not found!");
         return Criptos

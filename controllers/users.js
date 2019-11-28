@@ -18,11 +18,11 @@ const create = (req, res) => {
 
 const login = (req, res) => {
     const {username,password} = req.body;
-    if(!username || !password) return res.status(400).send("Please send an username and a password");
+    if(!username || !password) return res.status(400).send({success:false, message: "Please send an username and a password"});
     return Users
         .findOne({where: {username,password}})
         .then(user => {
-            if(!user) return res.status(404).send("User not found!");
+            if(!user) return res.status(404).send({success:false, message:"User not found!"});
             const token = signJWT(user.username, user.id);
             return res.status(200).send(token);
         })
