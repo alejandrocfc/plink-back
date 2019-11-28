@@ -18,11 +18,7 @@ const create = async (req, res) => {
         userId: req.userId
     })
         .then(snap => res.status(201).send("Created"))
-        .catch(error => res.status(401).json({
-            success: false,
-            code: error.original.errno,
-            message: error.original.sqlMessage
-        }));
+        .catch(error => res.status(401).json({success: false, message: error}));
 };
 
 const mine = async (req, res) => {
@@ -39,13 +35,9 @@ const mine = async (req, res) => {
                     return res.status(401).json({success: false, message: e.message})
                 }
             })
-            .catch(error => res.status(401).json({
-                success: false,
-                code: error.original.errno,
-                message: error.original.sqlMessage
-            }));
+            .catch(error => res.status(401).json({success: false, message: error}));
     }catch (error) {
-        res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage })
+        res.status(401).json({ success:false, message: error })
     }
 };
 
@@ -66,10 +58,9 @@ const top = async (req, res) => {
                     return res.status(401).json({ success:false, message: e.message })
                 }
             })
-            .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
+            .catch(error => res.status(401).json({ success:false, message: error }));
     }catch (error) {
-        console.log(error);
-        res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage })
+        res.status(401).json({ success:false, message: error })
     }
 };
 

@@ -13,7 +13,9 @@ const create = (req, res) => {
         currency: req.body.currency
     })
         .then(user => res.status(201).send("Created"))
-        .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
+        .catch(error => {
+            res.status(401).json({ success:false, message: error })
+        });
 };
 
 const login = (req, res) => {
@@ -26,7 +28,7 @@ const login = (req, res) => {
             const token = signJWT(user.username, user.id);
             return res.status(200).send(token);
         })
-        .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error.original.sqlMessage }));
+        .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error }));
 };
 
 const checkUser = (id) => new Promise((resolve, reject) => {
