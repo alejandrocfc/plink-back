@@ -32,4 +32,4 @@ En el archivo ``config/config.json`` cambiar las variables para acceso a la DB d
 
 ### Supuestos
 - Los usuarios solo se pueden registrar e ingresar
-- Las criptomonedas son solo creables
+- Las criptomonedas son solo creables y listadas
