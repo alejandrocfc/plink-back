@@ -1,30 +1,26 @@
 const Criptos = require('../models').Criptos;
-const Users = require('../models').Users;
 const UsersCtrl = require('./users');
 const {criptoSchema} = require("../helpers/constants");
 const {parseCoin, checkCripto, orderList} = require("../helpers/utils");
 
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
     const {error} = criptoSchema.validate(req.body);
-    if(error) return res.status(401).send(error);
+    if(error) return next(error);
     const check = await checkCripto(req.body.name);
-    if(!check) return res.status(401).json({
-        success: false,
-        message: `La Criptomoneda ${req.body.name} no existe en el listado de BraveNew Coin`
-    });
+    if(!check) return next(`La Criptomoneda ${req.body.name} no existe en el listado de BraveNew Coin`);
     return Criptos.create({
         name: req.body.name,
         userId: req.userId
     })
         .then(snap => res.status(201).send("Created"))
-        .catch(error => res.status(401).json({success: false, message: error}));
+        .catch(error => next(error));
 };
 
-const mine = async (req, res) => {
+const mine = async (req, res, next) => {
     try {
         const user = await UsersCtrl.checkUser(req.userId);
-        if (!user) return res.status(404).send("User not found!");
+        if (!user) return next("User not found!");
         return Criptos
             .findAll({where: {userId: req.userId}})
             .then(async snap => {
@@ -35,18 +31,18 @@ const mine = async (req, res) => {
                     return res.status(401).json({success: false, message: e.message})
                 }
             })
-            .catch(error => res.status(401).json({success: false, message: error}));
+            .catch(error => next(error));
     }catch (error) {
-        res.status(401).json({ success:false, message: error })
+        next(error)
     }
 };
 
-const top = async (req, res) => {
+const top = async (req, res, next) => {
     try{
         let order = req.query.order;
         if(!order || !order.match('^(ASC|DESC)$')) order = "DESC";
         const user = await UsersCtrl.checkUser(req.userId);
-        if(!user) return res.status(404).send("User not found!");
+        if(!user) return next("User not found!");
         return Criptos
             .findAll({where: {userId:req.userId}})
             .then(async snap => {
@@ -55,12 +51,12 @@ const top = async (req, res) => {
                     return res.status(200).json(orderList(list, order));
                 }
                 catch (e) {
-                    return res.status(401).json({ success:false, message: e.message })
+                    return next(e)
                 }
             })
-            .catch(error => res.status(401).json({ success:false, message: error }));
+            .catch(error => next(error));
     }catch (error) {
-        res.status(401).json({ success:false, message: error })
+        next(error)
     }
 };
 

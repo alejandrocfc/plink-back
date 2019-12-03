@@ -3,7 +3,7 @@ const Axios = require('axios');
 const {ApiKey} = require("./constants");
 
 Axios.defaults.baseURL = 'https://bravenewcoin-v1.p.rapidapi.com/';
-Axios.defaults.headers.common['Authorization'] = ApiKey;
+Axios.defaults.headers.common['X-RapidAPI-Key'] = ApiKey;
 
 /**
  * Middleware: Verificar que el Token aún esté vivo
@@ -16,7 +16,7 @@ function checkJWT(req, res, next){
     // verifies secret and checks expiration time
     JWT.verify(token, 'plink', (err, decoded) => {
         if (err)
-            return res.json({ success: false, message: 'Failed to authenticate token' });
+            return next(err);
         else {
             req.userId = decoded.id;
             return next(); // call next function, req and res will be available to it
@@ -31,7 +31,7 @@ function checkJWT(req, res, next){
  * @returns JWT Firmado
  */
 function signJWT(username, id){
-    return JWT.sign({ username, id }, "plink", { expiresIn: "2m" });
+    return JWT.sign({ username, id }, "plink", { expiresIn: "10m" });
 }
 
 /**
@@ -44,7 +44,7 @@ function parseCoin(list,currency) {
     return new Promise((resolve, reject) => {
         const items = [];
         Axios.all(list.map(({name}) => {
-            return Axios.get(`convert?qty=1&from=${name}&to=${currency}`, {headers: {'X-RapidAPI-Key': '78a4f7a824mshc139234a286ab1ep1bd37djsn0e0c176f8a7b'}})
+            return Axios.get(`convert?qty=1&from=${name}&to=${currency}`)
                 .then(({data})=> {
                     if(data.success){
                         return items.push({name:data.from_name,source:data.source,price:data.to_quantity})
@@ -85,7 +85,7 @@ function handleReqError(error){
  * @returns Booleano si la criptomoneda existe
  */
 function checkCripto(name){
-    return Axios.get(`ticker?coin=${name}`, {headers: {'X-RapidAPI-Key': '78a4f7a824mshc139234a286ab1ep1bd37djsn0e0c176f8a7b'}})
+    return Axios.get(`ticker?coin=${name}`)
         .then(({data})=> data.success);
 }
 

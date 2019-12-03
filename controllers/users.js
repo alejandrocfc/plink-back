@@ -2,7 +2,7 @@ const Users = require('../models').Users;
 const {userSchema} = require("../helpers/constants");
 const  {signJWT} = require("../helpers/utils");
 
-const create = (req, res) => {
+const create = (req, res, next) => {
     const {error} = userSchema.validate(req.body);
     if(error) return res.status(400).send(error);
     return Users.create({
@@ -13,12 +13,10 @@ const create = (req, res) => {
         currency: req.body.currency
     })
         .then(user => res.status(201).send("Created"))
-        .catch(error => {
-            res.status(401).json({ success:false, message: error })
-        });
+        .catch(error => next(error));
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
     const {username,password} = req.body;
     if(!username || !password) return res.status(400).send({success:false, message: "Please send an username and a password"});
     return Users
@@ -28,7 +26,7 @@ const login = (req, res) => {
             const token = signJWT(user.username, user.id);
             return res.status(200).send(token);
         })
-        .catch(error => res.status(401).json({ success:false, code: error.original.errno, message: error }));
+        .catch(error => next(error));
 };
 
 const checkUser = (id) => new Promise((resolve, reject) => {
