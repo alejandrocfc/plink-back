@@ -91,9 +91,9 @@ function checkCripto(name){
 
 /**
  * Desde el listado, ordena de acuerdo al parametro por precio y saca los tres primeros
- * @param list
- * @param order : ASC o DESC
- * @returns {Int16Array}
+ * @param list → Array
+ * @param order → ASC o DESC
+ * @returns Array
  */
 function orderList(list, order){
     const sort = list.sort((a, b) => order === 'ASC' ? a.price - b.price : b.price - a.price);
